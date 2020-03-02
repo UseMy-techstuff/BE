@@ -69,7 +69,26 @@ router.get('/:id/stuffs', restricted, (req, res) => {
       console.log(err);
       res.status(500).json({ errorMessage: 'Server-side issue' });
     })
-})
+});
+
+router.post("/:id/stuffs", (req, res) => {
+  const stuff = req.body;
+  const { id } = req.params;
+  stuff.user_id = id;
+
+  if (stuff.item_name && stuff.price) {
+    db.addStuff(stuff)
+      .then(added => {
+        res.status(200).json(added);
+      })
+      .catch(err => {
+        console.log(err);
+        res.status(500).json({ errorMessage: "Server-side Issue." });
+      });
+  } else {
+    res.status(400).json({ errorMessage: "More data required." });
+  }
+});
 
 module.exports = router;
 

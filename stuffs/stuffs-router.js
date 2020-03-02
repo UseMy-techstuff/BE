@@ -32,23 +32,6 @@ router.get('/:id', (req,res) => {
       });
 });
 
-router.post('/', (req, res) => {
-    const stuff = req.body;
-
-    if(stuff.item && stuff.price) {
-        db.add(stuff)
-          .then(added => {
-            res.status(200).json(added);
-          })
-          .catch(err => {
-            console.log(err);
-            res.status(500).json({ errorMessage: "Server-side Issue." });
-          });
-    } else {
-        res.status(400).json({ errorMessage: 'More data required.' })
-    }
-});
-
 router.put('/:id', (req, res) => {
     const { id } = req.params;
     const newStuff = req.body;
