@@ -57,6 +57,19 @@ router.post('/login', (req, res) => {
     })
 });
 
+router.get('/:id/stuffs', (req, res) => {
+  const { id } = req.params;
+
+  db.findStuffByUserId(id)
+    .then(found => {
+      res.status(200).json(found);
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json({ errorMessage: 'Server-side issue' });
+    })
+})
+
 module.exports = router;
 
 function generateToken(user) {
