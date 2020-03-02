@@ -42,7 +42,7 @@ server.use(session(sessionConfig));
 
 // use routers
 server.use('/api/users', userRouter);
-server.use('/api/stuffs', authorize, stuffsRouter);
+server.use('/api/stuffs', stuffsRouter);
 
 //routes
 server.get('/', (req, res) => {

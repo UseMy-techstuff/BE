@@ -4,7 +4,11 @@ module.exports = {
   add,
   find,
   findBy,
-  findById
+  findById,
+  findStuffByUserId,
+  addStuff,
+  updateStuff,
+  removeStuff
 };
 
 function find() {
@@ -25,4 +29,21 @@ function findById(id) {
   return db('users')
     .where({ id })
     .first();
+};
+
+function findStuffByUserId(id) {
+  return db("stuffs")
+    .where({user_id: id});
+};
+
+function addStuff(item) {
+  return db("stuffs").insert(item);
+};
+
+function updateStuff(id, item) {
+    return db("stuffs").where({ id: id }).update(item);
+};
+
+function removeStuff(id) {
+    return db("stuffs").where({ id: id }).del();
 };
