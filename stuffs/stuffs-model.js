@@ -9,9 +9,9 @@ module.exports = {
 
 function find(id) {
     if(id) {
-        return db("stuffs").where("id", id);
+        return db("stuffs").where({ id: id });
     } else {
-        return db("stuffs").select("id", "item", "price");
+        return db("stuffs");
     }
 };
 
@@ -26,5 +26,5 @@ function update(id, item) {
 };
 
 function remove(id) {
-    return db("stuffs").where({ id: id}).del();
+    return db("stuffs").where({ id: id }).del();
 };

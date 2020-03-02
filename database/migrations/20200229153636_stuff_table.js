@@ -4,12 +4,30 @@ exports.up = function(knex) {
       stuff.increments();
 
       stuff
-        .string('item', 128)
+        .integer("user_id")
+        .unsigned()
+        .notNullable()
+        .references("id")
+        .inTable("users")
+        .onDelete("CASCADE")
+        .onUpdate("CASCADE");
+
+      stuff
+        .string('item_name', 128)
         .notNullable();
+
+      stuff.string('description')
 
       stuff
         .integer('price', 128)
         .notNullable();
+      
+      stuff
+        .boolean('rented')
+        .defaultTo(false);
+
+      stuff
+        .string('img_url');
   })
 };
 

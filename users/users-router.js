@@ -2,6 +2,7 @@ const router = require('express').Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const jwtSecret = require('../config/secrets.js');
+const restricted = require('../middleware/restricted-middleware.js');
 
 const db = require('./users-model');
 
@@ -57,7 +58,7 @@ router.post('/login', (req, res) => {
     })
 });
 
-router.get('/:id/stuffs', (req, res) => {
+router.get('/:id/stuffs', restricted, (req, res) => {
   const { id } = req.params;
 
   db.findStuffByUserId(id)
