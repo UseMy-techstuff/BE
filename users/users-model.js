@@ -6,7 +6,9 @@ module.exports = {
   findBy,
   findById,
   findStuffByUserId,
-  addStuff
+  addStuff,
+  updateStuff,
+  removeStuff
 };
 
 function find() {
@@ -35,8 +37,13 @@ function findStuffByUserId(id) {
 };
 
 function addStuff(item) {
-  db("stuffs")
-    .insert(item)
-  
-  return db("stuffs").where({ user_id: item.user_id })
+  return db("stuffs").insert(item);
+};
+
+function updateStuff(id, item) {
+    return db("stuffs").where({ id: id }).update(item);
+};
+
+function removeStuff(id) {
+    return db("stuffs").where({ id: id }).del();
 };

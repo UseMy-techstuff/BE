@@ -71,7 +71,7 @@ router.get('/:id/stuffs', restricted, (req, res) => {
     })
 });
 
-router.post("/:id/stuffs", (req, res) => {
+router.post("/:id/stuffs", restricted, (req, res) => {
   const stuff = req.body;
   const { id } = req.params;
   stuff.user_id = id;
@@ -79,7 +79,10 @@ router.post("/:id/stuffs", (req, res) => {
   if (stuff.item_name && stuff.price) {
     db.addStuff(stuff)
       .then(added => {
-        res.status(200).json(added);
+        res.status(201).json({
+          message: "item added",
+          item_id: added[0]
+        });
       })
       .catch(err => {
         console.log(err);
@@ -88,6 +91,33 @@ router.post("/:id/stuffs", (req, res) => {
   } else {
     res.status(400).json({ errorMessage: "More data required." });
   }
+});
+
+router.put("/:id/stuffs/:id", restricted, (req, res) => {
+  const { id } = req.params;
+  const newStuff = req.body;
+
+  db.updateStuff(id, newStuff)
+    .then(updated => {
+      res.status(200).json(updated);
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json({ errorMessage: "Server-side issue." });
+    });
+});
+
+router.delete("/:id/stuffs/:id", restricted, (req, res) => {
+  const { id } = req.params;
+
+  db.removeStuff(id)
+    .then(updated => {
+      res.status(200).json(updated);
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json({ errorMessage: "Server-side issue." });
+    });
 });
 
 module.exports = router;
