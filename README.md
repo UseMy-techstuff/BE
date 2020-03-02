@@ -9,6 +9,9 @@ BackEnd for Use My Tech Stuff
 | Login User | POST | https://use-my-stuff.herokuapp.com/api/users/login |
 | List of "Stuff" | GET | https://use-my-stuff.herokuapp.com/api/stuffs |
 | Single Item | GET | https://use-my-stuff.herokuapp.com/api/stuffs/:id |
+| Update Item | PUT | https://use-my-stuff.herokuapp.com/api/stuffs/:id |
+| Add Item | POST | https://use-my-stuff.herokuapp.com/api/stuffs/ |
+| Delete Item | DELETE | https://use-my-stuff.herokuapp.com/api/stuffs/:id |
 
 #### User Schema
 
