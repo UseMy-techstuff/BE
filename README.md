@@ -7,7 +7,8 @@ BackEnd for Use My Tech Stuff
 | :--|:--:|:--|
 | Register User | POST | https://use-my-stuff.herokuapp.com/api/users/register | 
 | Login User | POST | https://use-my-stuff.herokuapp.com/api/users/login |
-| List of a users "Stuff"(auth) | GET | https://use-my-stuff.herokuapp.com/api/users/:id/stuffs |
+| List of a User's "Stuff"(auth) | GET | https://use-my-stuff.herokuapp.com/api/users/:id/stuffs |
+| User's single "Stuff"(auth) | GET | https://use-my-stuff.herokuapp.com/api/users/:id/stuffs/:id |
 | Update Item(auth) | PUT | https://use-my-stuff.herokuapp.com/api/users/:id/stuffs/:id |
 | Delete Item(auth) | DELETE | https://use-my-stuff.herokuapp.com/api/users/:id/stuffs/:id |
 | Add Item(auth) | POST | https://use-my-stuff.herokuapp.com/api/users/:id/stuffs |

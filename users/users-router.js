@@ -93,6 +93,20 @@ router.get('/:id/stuffs', restricted, (req, res) => {
     })
 });
 
+router.get('/:id/stuffs/:stuffId', restricted, (req, res) => {
+  const { id } = req.params;
+  const { stuffId } = req.params;
+
+  db.findStuff(id, stuffId)
+    .then(found => {
+      res.status(200).json(found);
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json({ errorMessage: 'Server-side issue' });
+    })
+});
+
 router.post("/:id/stuffs", restricted, (req, res) => {
   const stuff = req.body;
   const { id } = req.params;
