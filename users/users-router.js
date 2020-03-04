@@ -17,9 +17,17 @@ router.post('/register', (req, res) => {
     const hash = bcrypt.hashSync(newUser.password, 8);
     newUser.password = hash;
 
-    db
-      .add(newUser)
-      .then(user => {
+    if (newUser.username === undefined) {
+      res.status(400).json({ errorMessage: "Missing username" });
+    } else if (newUser.password === undefined) {
+      res.status(400).json({ errorMessage: "Missing password" });
+    } else if (newUser.first_name === undefined) {
+      res.status(400).json({ errorMessage: "Missing first_name" });
+    } else if (newUser.last_name === undefined) {
+      res.status(400).json({ errorMessage: "Missing last_name" });
+    } else {
+      db.add(newUser)
+        .then(user => {
           req.session.loggedin = true;
           res.status(201).json({
             message: "profile created!",
@@ -28,8 +36,19 @@ router.post('/register', (req, res) => {
               username: user.username
             }
           });
-      })
-      .catch(err => res.status(500).json({ errorMessage: 'Seems like a server-side issue' }))
+        })
+        .catch(err => {
+          console.log(err.errno);
+          if(err.errno === 19){
+            res.status(400).json({ errorMessage: 'Username already exists' });
+          } else {
+            res
+              .status(500)
+              .json({ errorMessage: "Seems like a server-side issue" }); 
+          }
+        });
+    } 
+    
 });
 
 router.post('/login', (req, res) => {
@@ -52,7 +71,7 @@ router.post('/login', (req, res) => {
           token
         });
       } else {
-        res.status(401).json({ message: "Invalid Credentials" });
+        res.status(401).json({ message: "Invalid Token" });
       }
     })
     .catch(err => {
@@ -92,11 +111,11 @@ router.post("/:id/stuffs", restricted, (req, res) => {
         res.status(500).json({ errorMessage: "Server-side Issue." });
       });
   } else {
-    res.status(400).json({ errorMessage: "More data required." });
+    res.status(400).json({ errorMessage: "Item name or item price missing." });
   }
 });
 
-router.put("/:id/stuffs/:id", restricted, (req, res) => {
+router.put("/:id/stuffs/:id", validateStuffId(), restricted, (req, res) => {
   const { id } = req.params;
   const newStuff = req.body;
 
@@ -110,7 +129,7 @@ router.put("/:id/stuffs/:id", restricted, (req, res) => {
     });
 });
 
-router.delete("/:id/stuffs/:id", restricted, (req, res) => {
+router.delete("/:id/stuffs/:id", validateStuffId(), restricted, (req, res) => {
   const { id } = req.params;
 
   db.removeStuff(id)
@@ -136,4 +155,27 @@ function generateToken(user) {
     expiresIn: "1h"
   };
   return jwt.sign(payload, jwtSecret, options);
-}
+};
+
+function validateStuffId() {
+  return (req, res, next) => {
+    const { id } = req.params;
+
+    db.findStuffByUserId(id)
+    .then(found => {
+      if (found.length < 1) {
+        res
+          .status(400)
+          .json({
+            errorMessage: "ID given does not exist or cannot be found."
+          });
+      } else {
+        next();
+      }
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json({ errorMessage: 'Server-side Issue.' })
+    });
+  };
+};
