@@ -93,6 +93,20 @@ router.get('/:id/stuffs', restricted, (req, res) => {
     })
 });
 
+router.get('/:id/stuffs/:stuffId', restricted, (req, res) => {
+  const { id } = req.params;
+  const { stuffId } = req.params;
+
+  db.findStuff(id, stuffId)
+    .then(found => {
+      res.status(200).json(found);
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json({ errorMessage: 'Server-side issue' });
+    })
+});
+
 router.post("/:id/stuffs", restricted, (req, res) => {
   const stuff = req.body;
   const { id } = req.params;
@@ -111,15 +125,15 @@ router.post("/:id/stuffs", restricted, (req, res) => {
         res.status(500).json({ errorMessage: "Server-side Issue." });
       });
   } else {
-    res.status(400).json({ errorMessage: "Item name or item price missing." });
+    res.status(400).json({ errorMessage: "Required field(name or price) missing." });
   }
 });
 
-router.put("/:id/stuffs/:id", validateStuffId(), restricted, (req, res) => {
-  const { id } = req.params;
+router.put("/:id/stuffs/:stuffId", validateStuffId(), restricted, (req, res) => {
+  const { stuffId } = req.params;
   const newStuff = req.body;
 
-  db.updateStuff(id, newStuff)
+  db.updateStuff(stuffId, newStuff)
     .then(updated => {
       res.status(200).json(updated);
     })
@@ -129,10 +143,10 @@ router.put("/:id/stuffs/:id", validateStuffId(), restricted, (req, res) => {
     });
 });
 
-router.delete("/:id/stuffs/:id", validateStuffId(), restricted, (req, res) => {
-  const { id } = req.params;
+router.delete("/:id/stuffs/:stuffId", validateStuffId(), restricted, (req, res) => {
+  const { stuffId } = req.params;
 
-  db.removeStuff(id)
+  db.removeStuff(stuffId)
     .then(updated => {
       res.status(200).json(updated);
     })

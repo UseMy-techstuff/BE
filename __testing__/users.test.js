@@ -1,11 +1,12 @@
 const server = require('../api/server.js');
 const request = require('supertest');
 
-describe('API Calls', () => {
+describe('User API Calls', () => {
     it('should run tests', () => {
         expect(false).toBe(false);
     });
 
+    // Login
     describe("POST api/users/login", () => {
       const user = {
         username: "test",
@@ -62,6 +63,7 @@ describe('API Calls', () => {
       });
     });
 
+    // Register
     describe("POST api/users/register", () => {
       const user = {
         username: "test30",
@@ -76,17 +78,6 @@ describe('API Calls', () => {
           .send(user)
           .then(res => {
             expect(res.status).toBe(201);
-          });
-      });
-
-      it("should return welcome message", () => {
-        return request(server)
-          .post("/api/users/register")
-          .send(user)
-          .then(res => {
-            console.log(res.body);
-            const register = res.body;
-            expect(register.message).toEqual("profile created!");
           });
       });
     });
