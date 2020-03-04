@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/UseMy-techstuff/BE#readme",
   "dependencies": {
+    "axios": "^0.19.2",
     "bcryptjs": "^2.4.3",
     "connect-session-knex": "^1.5.0",
     "cors": "^2.8.5",
